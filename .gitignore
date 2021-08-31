@@ -1,3 +1,3 @@
-./locales
-.xls
-.xlsx
+locales/
+*.xls
+*.xlsx
