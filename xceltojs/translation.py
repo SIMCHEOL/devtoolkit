@@ -3,7 +3,6 @@ import os
 import shutil
 from openpyxl import load_workbook
 
-
 def excel_json(fp, idx, data):
     fp.write('{\n')
     for row in data.iter_rows(min_row = 2):
@@ -36,6 +35,7 @@ data = wb.active
 
 idx = 2
 for path in directory_path:
+    print(path+", "+idx)
     target_path = locale_path + path
     os.makedirs(target_path, exist_ok=True)
     fp = open(target_path + '/' + target_file_name, 'w')
