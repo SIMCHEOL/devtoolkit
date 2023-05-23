@@ -31,6 +31,11 @@ function initDefaultValue(gc: GridCode): ObjectKeyType {
 function valueFilter(val: string): string {
     let ret: string = "==== WARNING ====";
     let tmp: string = val.toLowerCase();
+
+    if(tmp === 'undefined' || typeof tmp === 'undefined' || tmp === null || tmp === "null" || tmp === "NULL") {
+        tmp = "0";
+    }
+
     let keyword_table: KeywordType = {
         enable: 1,
         disable: 0,
@@ -48,6 +53,10 @@ function valueFilter(val: string): string {
         alternative: 2,
         irated: 0,
         prated: 1,
+        operation: 1,
+        "not operation": 0,
+        a: 0,
+        b: 1
     }
 
     if(tmp in keyword_table) {
@@ -68,36 +77,37 @@ function getFile(filename: string, grid_code: GridCode):object {
         let emsDbColumn = grid_code.pr === defines.production_MOW ? defines.production_MOW_COLUMN : defines.production_PVES_COLUMN;
         let defaultDbColumn = grid_code.dc;
 
-
-        console.log("Grid code : ", grid_code.gc ,", Sheet name ->", sheetName);
+        console.log("Grid code :", grid_code.gc , ", Capacity :", grid_code.ca ,", Sheet name ->", sheetName);
         let tmp_json: ObjectKeyType = initDefaultValue(grid_code);
         let retArray: ObjectKeyType[] = [];
         
         const regex_column = /[^0-9]/g;
         const regex_row = /[^a-zA-Z]/g;
-        
+        const regex_bucket = /\(.*\)/g;
+
         for(let obj in sheetContent) {
             if(obj.replace(regex_row, "") === emsDbColumn) {
                 if(sheetContent[obj].w) {
                     // If ems db has this key
                     let key: string = sheetContent[obj].w;
-                    let value: string = sheetContent[defaultDbColumn + obj.replace(regex_column, "")].w;
+                    let value: string = "";
+                    value = String(sheetContent[defaultDbColumn + obj.replace(regex_column, "")]?.w);
                     
-                    tmp_json[key] = valueFilter(String(value));
-
                     // Only USA Grid Code Case
                     if(grid_code.pr === defines.production_PVES) {
                         // Select one both 2 items.
-                        if(tmp_json[key].indexOf("/") !== -1) {
-                            let tmp_value_for_select: string = tmp_json[key].replace(" ", "");
+                        if(value.indexOf("/") !== -1) {
                             if(grid_code.ca > defines.PVES_POWER_PIVOT) {
-                                tmp_value_for_select = tmp_value_for_select.split("/")[0];
+                                value = value.split("/")[1];
                             } else {
-                                tmp_value_for_select = tmp_value_for_select.split("/")[1];
+                                value = value.split("/")[0];
                             }
-                            tmp_json[key] = tmp_value_for_select;
                         }
                     }
+                    value = value.trim();
+                    value = value.replace(regex_bucket, "");
+                    tmp_json[key] = valueFilter(value);
+
                 } else {
                     // This cell havn't value.
                 }

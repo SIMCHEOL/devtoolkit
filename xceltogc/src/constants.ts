@@ -4,6 +4,7 @@ const defines = {
     production_PVES : 3,
     production_PVES_COLUMN : "Z",
     PVES_POWER_PIVOT : 7600,
+    DB_ITEM_GRID_CODE : "grid_code",
 }
 
 interface ExtValue {
