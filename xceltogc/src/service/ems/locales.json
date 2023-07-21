@@ -1,0 +1,146 @@
+[
+    {
+      "disp_name": "English (US)",
+      "grid_code": [
+        "8401",
+        "8402",
+        "8403",
+        "8404",
+        "8405"
+      ],
+      "country": "US",
+      "country_code": "840",
+      "lang": "en-US",
+      "lang_code": "1",
+      "timezone": [
+        "America/New_York"
+      ],
+      "date_format": "mm-dd-yy"
+    },
+    {
+      "disp_name": "English (UK)",
+      "grid_code": [
+        "826",
+        "8262"
+      ],
+      "country": "England",
+      "country_code": "826",
+      "lang": "en-GB",
+      "lang_code": "2",
+      "timezone": [
+        "Europe/London"
+      ],
+      "date_format": "dd-mm-yy"
+    },
+    {
+      "disp_name": "English (AU)",
+      "grid_code": [
+        "361",
+        "362",
+        "363"
+      ],
+      "country": "Australia",
+      "country_code": "36",
+      "lang": "en-AU",
+      "lang_code": "3",
+      "timezone": [
+        "Australia/Sydney",
+        "Australia/Broken_Hill",
+        "Australia/Currie",
+        "Australia/Darwin",
+        "Australia/Eucla",
+        "Australia/Hobart",
+        "Australia/Lindeman",
+        "Australia/Lord_Howe",
+        "Australia/Melbourne",
+        "Australia/Perth"
+      ],
+      "date_format": "dd-mm-yy"
+    },
+    {
+      "disp_name": "English (AU)",
+      "grid_code": [
+        "554"
+      ],
+      "country": "New Zealand",
+      "country_code": "554",
+      "lang": "en-AU",
+      "lang_code": "3",
+      "timezone": [
+        "Pacific/Auckland"
+      ],
+      "date_format": "dd-mm-yy"
+    },
+    {
+      "disp_name": "Français",
+      "grid_code": [
+        "2501",
+        "2502",
+        "2503",
+        "2504"
+      ],
+      "country": "France",
+      "country_code": "250",
+      "lang": "fr",
+      "lang_code": "4",
+      "timezone": [
+        "Europe/Paris"
+      ],
+      "date_format": "dd-mm-yy"
+    },
+    {
+      "disp_name": "Deutsche",
+      "grid_code": [
+        "276"
+      ],
+      "country": "Germany",
+      "country_code": "276",
+      "lang": "de",
+      "lang_code": "5",
+      "timezone": [
+        "Europe/Berlin"
+      ],
+      "date_format": "dd-mm-yy"
+    },
+    {
+      "disp_name": "Italiano",
+      "grid_code": [],
+      "country": "Italy",
+      "country_code": "380",
+      "lang": "it",
+      "lang_code": "6",
+      "timezone": [
+        "Europe/Berlin"
+      ],
+      "date_format": "dd-mm-yy"
+    },
+    {
+      "disp_name": "日本語",
+      "grid_code": [
+        "392"
+      ],
+      "country": "Japan",
+      "country_code": "392",
+      "lang": "ja",
+      "lang_code": "7",
+      "timezone": [
+        "Asia/Tokyo"
+      ],
+      "date_format": "yy-mm-dd"
+    },
+    {
+      "disp_name": "한국어",
+      "grid_code": [
+        "410"
+      ],
+      "country": "Korea",
+      "country_code": "410",
+      "lang": "en-US",
+      "lang_code": "1",
+      "timezone": [
+        "Asia/Seoul"
+      ],
+      "date_format": "yy-mm-dd"
+    }
+  ]
+  
