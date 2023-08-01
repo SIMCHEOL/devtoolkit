@@ -1,6 +1,6 @@
 const defines = {
     production_MOW : 2,
-    production_MOW_COLUMN : "AC",
+    production_MOW_COLUMN : "AE",
     production_PVES : 3,
     production_PVES_COLUMN : "Z",
     PVES_POWER_PIVOT : 7600,
