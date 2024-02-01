@@ -8,14 +8,9 @@ class GridCode {
     gc: number;
 
     /**
-     * production (MOW | Q.VOLT)
+     * production (MOW | PVES | ACMI | ACMI_CERT)
      */
     pr: number;
-
-    /**
-     * capacity
-     */
-    ca: number;
 
     /**
      * data column
@@ -34,10 +29,9 @@ class GridCode {
     inverter_export_power_limit: number;
     feed_in_limit: number;
 
-    constructor(grid_code: number, production: number, capacity: number, dc: string) {
+    constructor(grid_code: number, production: number, dc: string) {
         this.gc = grid_code;
         this.pr = production;
-        this.ca = capacity;
         this.dc = dc;
 
         this.country_code = 0;
@@ -88,30 +82,34 @@ class GridCode {
 }
 
 const GRID_CODE_LIST = [
-    new GridCode(276, defines.production_MOW, 4600, "H"),
-    new GridCode(361, defines.production_MOW, 5000, "I"),
-    new GridCode(362, defines.production_MOW, 5000, "J"),
-    new GridCode(363, defines.production_MOW, 5000, "K"),
-    new GridCode(554, defines.production_MOW, 5000, "L"),
-    new GridCode(2501, defines.production_MOW, 5000, "M"),
-    new GridCode(2502, defines.production_MOW, 5000, "N"),
-    new GridCode(2503, defines.production_MOW, 5000, "O"),
-    new GridCode(2504, defines.production_MOW, 5000, "P"),
-    new GridCode(2506, defines.production_MOW, 5000, "R"),
-    new GridCode(2507, defines.production_MOW, 5000, "S"),
-    new GridCode(826, defines.production_MOW, 5000, "T"),
-    new GridCode(8262, defines.production_MOW, 5000, "U"),
-    new GridCode(372, defines.production_MOW, 5000, "V"),
-    new GridCode(8401, defines.production_PVES, 7600, "K"),
-    new GridCode(8401, defines.production_PVES, 11400, "K"),
-    new GridCode(8402, defines.production_PVES, 7600, "L"),
-    new GridCode(8402, defines.production_PVES, 11400, "L"),
-    new GridCode(8403, defines.production_PVES, 7600, "M"),
-    new GridCode(8403, defines.production_PVES, 11400, "M"),
-    new GridCode(8404, defines.production_PVES, 7600, "N"),
-    new GridCode(8404, defines.production_PVES, 11400, "N"),
-    new GridCode(8405, defines.production_PVES, 7600, "O"),
-    new GridCode(8405, defines.production_PVES, 11400, "O"),
+    new GridCode(276, defines.production_MOW, "H"),
+    new GridCode(361, defines.production_MOW, "I"),
+    new GridCode(362, defines.production_MOW, "J"),
+    new GridCode(363, defines.production_MOW, "K"),
+    new GridCode(554, defines.production_MOW, "L"),
+    new GridCode(2501, defines.production_MOW, "M"),
+    new GridCode(2502, defines.production_MOW, "N"),
+    new GridCode(2503, defines.production_MOW, "O"),
+    new GridCode(2504, defines.production_MOW, "P"),
+    new GridCode(2506, defines.production_MOW, "R"),
+    new GridCode(2507, defines.production_MOW, "S"),
+    new GridCode(826, defines.production_MOW, "T"),
+    new GridCode(6201, defines.production_MOW, "U"),
+    new GridCode(6202, defines.production_MOW, "V"),
+    new GridCode(8262, defines.production_MOW, "W"),
+    new GridCode(372, defines.production_MOW, "X"),
+    new GridCode(901, defines.production_MOW, "Z"),
+    new GridCode(410, defines.production_MOW, "AB"),
+    new GridCode(704, defines.production_MOW, "AC"),
+    new GridCode(8401, defines.production_ACES, "J"),
+    new GridCode(8402, defines.production_ACES, "K"),
+    new GridCode(8403, defines.production_ACES, "L"),
+    new GridCode(8404, defines.production_ACES, "M"),
+    new GridCode(8451, defines.production_ACMI, "K"),
+    new GridCode(8452, defines.production_ACMI_OFFICIAL, "K"),
+    new GridCode(8453, defines.production_ACMI, "L"),
+    new GridCode(8454, defines.production_ACMI, "M"),
+    new GridCode(8455, defines.production_ACMI, "N"),
 ]
 
 
@@ -177,6 +175,16 @@ const EXT_VALUE_LIST: ExtValue[] = [
         feed_in_limit: 100,
     },
     {
+        grid_code: 6201, country_code: 620, timezone: "Europe/Lisbon", language_code: 2, gateway_conn: 0, sftp_address: "3.124.225.92", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 5000, inverter_export_power_limit: 5000, 
+        feed_in_limit: 100,
+    },
+    {
+        grid_code: 6202, country_code: 620, timezone: "Europe/Lisbon", language_code: 2, gateway_conn: 0, sftp_address: "3.124.225.92", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 4000, inverter_export_power_limit: 4000, 
+        feed_in_limit: 100,
+    },
+    {
         grid_code: 8262, country_code: 826, timezone: "Europe/London", language_code: 2, gateway_conn: 0, sftp_address: "3.124.225.92", 
         battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 5000, inverter_export_power_limit: 5000, 
         feed_in_limit: 100,
@@ -186,19 +194,24 @@ const EXT_VALUE_LIST: ExtValue[] = [
         battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 5000, inverter_export_power_limit: 5000, 
         feed_in_limit: 100,
     },
-    // {
-    //     grid_code: 392, country_code: 392, timezone: "Asia/Tokyo", language_code: 7, gateway_conn: 0, sftp_address: "", 
-    //     battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 4950, inverter_export_power_limit: 4950, 
-    //     feed_in_limit: 100,
-    // },
     {
-        grid_code: 8401, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
-        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 7600, inverter_export_power_limit: 7600, 
+        grid_code: 901, country_code: 276, timezone: "Europe/Berlin", language_code: 5, gateway_conn: 0, sftp_address: "3.124.225.92", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 4600, inverter_export_power_limit: 4600, 
+        feed_in_limit: 100,
+    },
+    {
+        grid_code: 410, country_code: 410, timezone: "Asia/Seoul", language_code: 1, gateway_conn: 0, sftp_address: "", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 5000, inverter_export_power_limit: 5000, 
+        feed_in_limit: 100,
+    },
+    {
+        grid_code: 704, country_code: 704, timezone: "Asia/Ho_Chi_Minh", language_code: 1, gateway_conn: 0, sftp_address: "", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 5000, inverter_export_power_limit: 5000, 
         feed_in_limit: 100,
     },
     {
         grid_code: 8401, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
-        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 11400, inverter_export_power_limit: 11400, 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 7600, inverter_export_power_limit: 7600, 
         feed_in_limit: 100,
     },
     {
@@ -207,18 +220,8 @@ const EXT_VALUE_LIST: ExtValue[] = [
         feed_in_limit: 100,
     },
     {
-        grid_code: 8402, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
-        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 11400, inverter_export_power_limit: 11400, 
-        feed_in_limit: 100,
-    },
-    {
         grid_code: 8403, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
         battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 7600, inverter_export_power_limit: 7600, 
-        feed_in_limit: 100,
-    },
-    {
-        grid_code: 8403, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
-        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 11400, inverter_export_power_limit: 11400, 
         feed_in_limit: 100,
     },
     {
@@ -227,23 +230,34 @@ const EXT_VALUE_LIST: ExtValue[] = [
         feed_in_limit: 100,
     },
     {
-        grid_code: 8404, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
-        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 11400, inverter_export_power_limit: 11400, 
+        grid_code: 8451, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 15356, inverter_export_power_limit: 15356, 
         feed_in_limit: 100,
     },
     {
-        grid_code: 8405, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
-        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 7600, inverter_export_power_limit: 7600, 
+        grid_code: 8452, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 15356, inverter_export_power_limit: 15356, 
         feed_in_limit: 100,
     },
     {
-        grid_code: 8405, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
-        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 11400, inverter_export_power_limit: 11400, 
+        grid_code: 8453, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 15356, inverter_export_power_limit: 15356, 
+        feed_in_limit: 100,
+    },
+    {
+        grid_code: 8454, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 15356, inverter_export_power_limit: 15356, 
+        feed_in_limit: 100,
+    },
+    {
+        grid_code: 8455, country_code: 840, timezone: "America/New_York", language_code: 1, gateway_conn: 0, sftp_address: "", 
+        battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 15356, inverter_export_power_limit: 15356, 
         feed_in_limit: 100,
     },
 ]
 
 for(let obj in GRID_CODE_LIST) {
+    console.log(" >> ", obj, GRID_CODE_LIST[obj].gc, EXT_VALUE_LIST[obj].grid_code)
     GRID_CODE_LIST[obj].setExtValue(EXT_VALUE_LIST[obj]);
 }
 

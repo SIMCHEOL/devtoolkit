@@ -1,5 +1,5 @@
 import * as xlsx from 'xlsx'
-import { defines } from './constants'
+import { defines, edmSheetEMSColDefines } from './constants'
 import { GridCode } from './grid_code';
 
 function hello() {
@@ -68,16 +68,31 @@ function valueFilter(val: string): string {
     return ret;
 }
 
+const CalcMi: KeywordType = {
+    invctrl_pcs_max_apparent_power_limit: 15356,
+    invctrl_pcs_varmax_q1: 8089,
+    invctrl_actpwr_setting: 15356,
+    invctrl_actpwr_over_excited_setting: 13052,
+    invctrl_actpwr_under_excited_setting: 13052,
+}
+
+function keyFilter(key: string, value: string) {
+    if(key in CalcMi) {
+        value = String(CalcMi[key]);
+    }
+    return value;
+}
+
 function getFile(filename: string, grid_code: GridCode):object {
     try {
         const excelFile = xlsx.readFile(filename);
         const sheetName = excelFile.SheetNames[grid_code.pr];
         const sheetContent = excelFile.Sheets[sheetName];
 
-        let emsDbColumn = grid_code.pr === defines.production_MOW ? defines.production_MOW_COLUMN : defines.production_PVES_COLUMN;
+        let emsDbColumn = edmSheetEMSColDefines[grid_code.pr];
         let defaultDbColumn = grid_code.dc;
 
-        console.log("Grid code :", grid_code.gc , ", Capacity :", grid_code.ca ,", Sheet name ->", sheetName);
+        console.log("Grid code :", grid_code.gc , ", Sheet name ->", sheetName);
         let tmp_json: ObjectKeyType = initDefaultValue(grid_code);
         let retArray: ObjectKeyType[] = [];
         
@@ -87,26 +102,19 @@ function getFile(filename: string, grid_code: GridCode):object {
 
         for(let obj in sheetContent) {
             if(obj.replace(regex_row, "") === emsDbColumn) {
-                if(sheetContent[obj].w) {
+                if(sheetContent[obj].w && "EMS DB column name" !== sheetContent[obj].w) {
                     // If ems db has this key
                     let key: string = sheetContent[obj].w;
                     let value: string = "";
                     value = String(sheetContent[defaultDbColumn + obj.replace(regex_column, "")]?.w);
                     
-                    // Only USA Grid Code Case
-                    if(grid_code.pr === defines.production_PVES) {
-                        // Select one both 2 items.
-                        if(value.indexOf("/") !== -1) {
-                            if(grid_code.ca > defines.PVES_POWER_PIVOT) {
-                                value = value.split("/")[1];
-                            } else {
-                                value = value.split("/")[0];
-                            }
-                        }
-                    }
                     value = value.trim();
                     value = value.replace(regex_bucket, "");
-                    tmp_json[key] = valueFilter(value);
+                    value = valueFilter(value);
+                    if(grid_code.pr === defines.production_ACMI || grid_code.pr === defines.production_ACMI_OFFICIAL) {
+                        value = keyFilter(key, value);
+                    }
+                    tmp_json[key] = value;
 
                 } else {
                     // This cell havn't value.
@@ -124,8 +132,26 @@ function getFile(filename: string, grid_code: GridCode):object {
     return [];
 }
 
+function getAdditionalValues(result: any) {
+    if(result[0].grid_code == 901) {
+        result[0]["pcs_connection_mode"] = "1";
+        result[0]["pcs_conn"] = "3";
+        result[0]["meter_model"] = "0";
+        result[0]["meter_model_pv"] = "0";
+
+    } else if (result[0].grid_code == 2506) {
+        result[0]["installed_rack_count"] = "1";
+        result[0]["meter_load_from_gw"] = "1";
+        result[0]["meter_load_from_gw_pv"] = "1";
+        result[0]["install_done"] = "1";
+    } else {
+        console.log("Just passed.");
+    }
+}
+
 export { 
     hello, 
     bye,
     getFile,
+    getAdditionalValues,
 };
