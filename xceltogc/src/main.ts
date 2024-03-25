@@ -8,7 +8,6 @@ make_default.hello();
 
 for(let obj of GRID_CODE_LIST) {
     result = make_default.getFile(process.argv[2], obj);
-    make_default.getAdditionalValues(result);
     json_string = JSON.stringify(result);
     let filename: string;
     filename = String(obj.gc);

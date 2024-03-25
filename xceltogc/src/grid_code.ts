@@ -29,6 +29,12 @@ class GridCode {
     inverter_export_power_limit: number;
     feed_in_limit: number;
 
+    /**
+     * 
+     * @param grid_code grid code value.
+     * @param production Data sheet index in Excel file.
+     * @param dc  Data Column index in Excel file.
+     */
     constructor(grid_code: number, production: number, dc: string) {
         this.gc = grid_code;
         this.pr = production;
@@ -112,7 +118,7 @@ const GRID_CODE_LIST = [
     new GridCode(8455, defines.production_ACMI, "N"),
 ]
 
-
+const EDF_ENR_GATEWAY_CONN = 3;
 const EXT_VALUE_LIST: ExtValue[] = [
     {
         grid_code: 276, country_code: 276, timezone: "Europe/Berlin", language_code: 5, gateway_conn: 0, sftp_address: "3.124.225.92", 
@@ -160,7 +166,7 @@ const EXT_VALUE_LIST: ExtValue[] = [
         feed_in_limit: 100,
     },
     {
-        grid_code: 2506, country_code: 250, timezone: "Europe/Paris", language_code: 4, gateway_conn: 0, sftp_address: "3.124.225.92", 
+        grid_code: 2506, country_code: 250, timezone: "Europe/Paris", language_code: 4, gateway_conn: EDF_ENR_GATEWAY_CONN, sftp_address: "3.124.225.92", 
         battery_hysteresis_low: 15, battery_hysteresis_high: 90, battery_backup_soc: 0, inverter_import_power_limit: 5000, inverter_export_power_limit: 5000, 
         feed_in_limit: 100,
     },

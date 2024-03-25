@@ -28,6 +28,29 @@ function initDefaultValue(gc: GridCode): ObjectKeyType {
     return ret;
 }
 
+/* 
+ *  getAdditionalValues() is called after grid code settings.
+ *  This values are depend on partial grid code. so, this values will be added at last in JSON file.
+ */
+function getAdditionalValues(result: any) {
+    if(result.grid_code == 901) {
+        result["pcs_connection_mode"] = "1";
+        result["pcs_conn"] = "3";
+        result["meter_model"] = "0";
+        result["meter_model_pv"] = "0";
+    } else if (result[0].grid_code == 2506) {
+        result["installed_rack_count"] = "1";
+        result["meter_load_from_gw"] = "1";
+        result["meter_load_from_gw_pv"] = "1";
+        result["install_done"] = "1";
+    }  else if (8401 <= result[0].grid_code && result[0].grid_code <= 8499) {
+        result["meter_model"] = "0";
+        result["meter_model_pv"] = "0";
+    } else {
+        console.log("Just passed.");
+    }
+}
+
 function valueFilter(val: string): string {
     let ret: string = "==== WARNING ====";
     let tmp: string = val.toLowerCase();
@@ -114,8 +137,11 @@ function getFile(filename: string, grid_code: GridCode):object {
                     if(grid_code.pr === defines.production_ACMI || grid_code.pr === defines.production_ACMI_OFFICIAL) {
                         value = keyFilter(key, value);
                     }
-                    tmp_json[key] = value;
-
+                    if(key in tmp_json) {
+                        console.log("key is already exists = ", key, grid_code.gc);
+                    } else {
+                        tmp_json[key] = value;
+                    }
                 } else {
                     // This cell havn't value.
                 }
@@ -123,6 +149,7 @@ function getFile(filename: string, grid_code: GridCode):object {
                 // do nothing.
             }
         }
+        getAdditionalValues(tmp_json);
         retArray.push(tmp_json);
         return retArray;
     } catch (error) {
@@ -132,26 +159,8 @@ function getFile(filename: string, grid_code: GridCode):object {
     return [];
 }
 
-function getAdditionalValues(result: any) {
-    if(result[0].grid_code == 901) {
-        result[0]["pcs_connection_mode"] = "1";
-        result[0]["pcs_conn"] = "3";
-        result[0]["meter_model"] = "0";
-        result[0]["meter_model_pv"] = "0";
-
-    } else if (result[0].grid_code == 2506) {
-        result[0]["installed_rack_count"] = "1";
-        result[0]["meter_load_from_gw"] = "1";
-        result[0]["meter_load_from_gw_pv"] = "1";
-        result[0]["install_done"] = "1";
-    } else {
-        console.log("Just passed.");
-    }
-}
-
 export { 
     hello, 
     bye,
     getFile,
-    getAdditionalValues,
 };

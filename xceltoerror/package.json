@@ -5,15 +5,12 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "get_json": "npm run start && npm run pretty",
     "start": "node ./build/main.js target_file.xlsx",
     "dev": "ts-node ./src/main.ts target_file.xlsx",
-    "clean": "rm -rf build && rm -rf node_modules && rm -f yarn.lock",
-    "pretty": "prettier --write \"./result/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
+    "clean": "rm -rf build && rm -rf node_modules && rm -f yarn.lock"
   },
   "dependencies": {
     "@types/node": "^20.1.4",
-    "prettier": "^2.0.0",
     "typescript": "4.9.5",
     "xlsx": "^0.18.5"
   },
