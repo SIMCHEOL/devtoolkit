@@ -1,6 +1,6 @@
 import * as make_default from './make_default';
 import * as ef from './ext/export_file';
-import { GRID_CODE_LIST } from './grid_code';
+import { GRID_CODE_LIST } from './excel_sheet_info';
 
 let result: object , json_string: string
 

@@ -1,6 +1,7 @@
 import * as xlsx from 'xlsx'
-import { defines, edmSheetEMSColDefines } from './constants'
-import { GridCode } from './grid_code';
+import { getEmsDbColumnForSheet, SHEET_INDEX_ACMI, SHEET_INDEX_ACMI_1547 } from './excel_sheet_info'
+import { getEmsDefaultValue, getAdditionalValues } from './ems_value_list';
+import { GridCode, EmsDefaultValue } from './GridCode';
 
 function hello() {
     console.log("=== Start process ===");
@@ -18,40 +19,17 @@ type KeywordType = {
     [idx: string]: number;
 }
 
-function initDefaultValue(gc: GridCode): ObjectKeyType {
+function getEmsDefaultJsonObject(default_value: EmsDefaultValue): ObjectKeyType {
     let ret: ObjectKeyType = {};
 
-    for(let idx in gc.getExtValue()) {
-        ret[idx] = String(gc.getExtValue()[idx]);
+    for(let idx in default_value) {
+        ret[idx] = String(default_value[idx]);
     }
 
     return ret;
 }
 
-/* 
- *  getAdditionalValues() is called after grid code settings.
- *  This values are depend on partial grid code. so, this values will be added at last in JSON file.
- */
-function getAdditionalValues(result: any) {
-    if(result.grid_code == 901) {
-        result["pcs_connection_mode"] = "1";
-        result["pcs_conn"] = "3";
-        result["meter_model"] = "0";
-        result["meter_model_pv"] = "0";
-    } else if (result[0].grid_code == 2506) {
-        result["installed_rack_count"] = "1";
-        result["meter_load_from_gw"] = "1";
-        result["meter_load_from_gw_pv"] = "1";
-        result["install_done"] = "1";
-    }  else if (8401 <= result[0].grid_code && result[0].grid_code <= 8499) {
-        result["meter_model"] = "0";
-        result["meter_model_pv"] = "0";
-    } else {
-        console.log("Just passed.");
-    }
-}
-
-function valueFilter(val: string): string {
+function valueFilter(gc: number, val: string): string {
     let ret: string = "==== WARNING ====";
     let tmp: string = val.toLowerCase();
 
@@ -82,10 +60,18 @@ function valueFilter(val: string): string {
         b: 1
     }
 
+    if(gc >= 8401) {
+        keyword_table.under = 1;
+        keyword_table.over = 0;
+    }
+
     if(tmp in keyword_table) {
         ret = String(keyword_table[tmp]);
     } else {
         ret = tmp;
+        if(isNaN(parseInt(tmp))) {
+            console.log("This keyword["+tmp+"] can not be found in keyword table.");
+        }
     }
     
     return ret;
@@ -109,14 +95,15 @@ function keyFilter(key: string, value: string) {
 function getFile(filename: string, grid_code: GridCode):object {
     try {
         const excelFile = xlsx.readFile(filename);
-        const sheetName = excelFile.SheetNames[grid_code.pr];
+        const sheetName = excelFile.SheetNames[grid_code.sheet_index];
         const sheetContent = excelFile.Sheets[sheetName];
 
-        let emsDbColumn = edmSheetEMSColDefines[grid_code.pr];
+        let emsDbColumn = getEmsDbColumnForSheet(grid_code.sheet_index);
         let defaultDbColumn = grid_code.dc;
 
         console.log("Grid code :", grid_code.gc , ", Sheet name ->", sheetName);
-        let tmp_json: ObjectKeyType = initDefaultValue(grid_code);
+        grid_code.setEmsValue(getEmsDefaultValue(grid_code.gc));
+        let tmp_json: ObjectKeyType = getEmsDefaultJsonObject(grid_code.getEmsValue());
         let retArray: ObjectKeyType[] = [];
         
         const regex_column = /[^0-9]/g;
@@ -133,8 +120,8 @@ function getFile(filename: string, grid_code: GridCode):object {
                     
                     value = value.trim();
                     value = value.replace(regex_bucket, "");
-                    value = valueFilter(value);
-                    if(grid_code.pr === defines.production_ACMI || grid_code.pr === defines.production_ACMI_OFFICIAL) {
+                    value = valueFilter(grid_code.gc, value);
+                    if(grid_code.sheet_index === SHEET_INDEX_ACMI || grid_code.sheet_index === SHEET_INDEX_ACMI_1547) {
                         value = keyFilter(key, value);
                     }
                     if(key in tmp_json) {
