@@ -57,7 +57,9 @@ function valueFilter(gc: number, val: string): string {
         operation: 1,
         "not operation": 0,
         a: 0,
-        b: 1
+        b: 1,
+        possible: 1,
+        impossible: 0,
     }
 
     if(gc >= 8401) {
