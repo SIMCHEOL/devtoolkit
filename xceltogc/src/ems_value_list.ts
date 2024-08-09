@@ -145,6 +145,7 @@ function getAdditionalValues(result: any) {
         result["meter_load_from_gw"] = "1";
         result["meter_load_from_gw_pv"] = "1";
         result["install_done"] = "1";
+        result["external_gateway_type"] = "4";
     }  else if (8401 <= result.grid_code && result.grid_code <= 8499) {
         result["meter_model"] = "0";
         result["meter_model_pv"] = "0";

@@ -1,5 +1,5 @@
 import * as xlsx from 'xlsx'
-import { getEmsDbColumnForSheet, SHEET_INDEX_ACMI, SHEET_INDEX_ACMI_1547 } from './excel_sheet_info'
+import { getEmsDbColumnForSheet } from './excel_sheet_info'
 import { getEmsDefaultValue, getAdditionalValues } from './ems_value_list';
 import { GridCode, EmsDefaultValue } from './GridCode';
 
@@ -79,21 +79,6 @@ function valueFilter(gc: number, val: string): string {
     return ret;
 }
 
-const CalcMi: KeywordType = {
-    invctrl_pcs_max_apparent_power_limit: 15356,
-    invctrl_pcs_varmax_q1: 8089,
-    invctrl_actpwr_setting: 15356,
-    invctrl_actpwr_over_excited_setting: 13052,
-    invctrl_actpwr_under_excited_setting: 13052,
-}
-
-function keyFilter(key: string, value: string) {
-    if(key in CalcMi) {
-        value = String(CalcMi[key]);
-    }
-    return value;
-}
-
 function getFile(filename: string, grid_code: GridCode):object {
     try {
         const excelFile = xlsx.readFile(filename);
@@ -123,9 +108,6 @@ function getFile(filename: string, grid_code: GridCode):object {
                     value = value.trim();
                     value = value.replace(regex_bucket, "");
                     value = valueFilter(grid_code.gc, value);
-                    if(grid_code.sheet_index === SHEET_INDEX_ACMI || grid_code.sheet_index === SHEET_INDEX_ACMI_1547) {
-                        value = keyFilter(key, value);
-                    }
                     if(key in tmp_json) {
                         console.log("key is already exists = ", key, grid_code.gc);
                     } else {
